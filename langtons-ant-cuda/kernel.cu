@@ -60,13 +60,13 @@ __global__ void ant_kernel(const uint8_t* __restrict__ sizes, const uint8_t* __r
         if (pattern[state]) ant_direction = -ant_direction;
         ant_position_x += ant_direction;
         if (ant_position_x >= GRID_SIZE) break;
-        index = ant_position_y * GRID_SIZE + ant_position_x;
+        index += ant_direction;
         state = grid[index];
         grid[index] = state < size ? state + 1 : 0;
         if (!pattern[state]) ant_direction = -ant_direction;
         ant_position_y += ant_direction;
         if (ant_position_y >= GRID_SIZE) break;
-        index = ant_position_y * GRID_SIZE + ant_position_x;
+        index += ant_direction * GRID_SIZE;
     }
 }
 
@@ -116,7 +116,7 @@ int main() {
         cudaMemcpy(d_sizes, sizes, num_valid_patterns, cudaMemcpyHostToDevice);
         cudaMemcpy(d_patterns, patterns, num_valid_patterns * 64, cudaMemcpyHostToDevice);
         cudaMemcpy(d_grids, grids, num_valid_patterns * GRID_SQUARED, cudaMemcpyHostToDevice);
-        ant_kernel << <num_valid_patterns, 1 >> > (d_sizes, d_patterns, d_grids);
+        ant_kernel<<<num_valid_patterns, 1>>>(d_sizes, d_patterns, d_grids);
         cudaDeviceSynchronize();
         cudaMemcpy(grids, d_grids, num_valid_patterns * GRID_SQUARED, cudaMemcpyDeviceToHost);
         cudaFree(d_sizes);
