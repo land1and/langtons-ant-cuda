@@ -83,8 +83,8 @@ int main() {
             valid_patterns[num_valid_patterns++] = i;
         }
         uint8_t* sizes = new uint8_t[num_valid_patterns];
-        uint8_t* patterns = new uint8_t[num_valid_patterns * 64]();
-        uint8_t* palettes = new uint8_t[num_valid_patterns * 256]();
+        uint8_t* patterns = new uint8_t[num_valid_patterns * 64];
+        uint8_t* palettes = new uint8_t[num_valid_patterns * 256];
         uint8_t* grids = new uint8_t[num_valid_patterns * GRID_SQUARED]();
         for (uint64_t i = 0; i < num_valid_patterns; ++i) {
             const uint64_t pattern = valid_patterns[i];
