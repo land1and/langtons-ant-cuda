@@ -60,13 +60,12 @@ __global__ void ant_kernel(const uint8_t* __restrict__ sizes, const uint8_t* __r
         if (pattern[state]) ant_direction = -ant_direction;
         index += ant_direction;
         ant_position_x += ant_direction;
-        if (ant_position_x >= GRID_SIZE) break;
         state = grid[index];
         grid[index] = state < size ? state + 1 : 0;
         if (!pattern[state]) ant_direction = -ant_direction;
         index += ant_direction * GRID_SIZE;
         ant_position_y += ant_direction;
-        if (ant_position_y >= GRID_SIZE) break;
+        if (ant_position_x >= GRID_SIZE || ant_position_y >= GRID_SIZE) break;
     }
 }
 
